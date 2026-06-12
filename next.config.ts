@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Izinkan akses dev server lewat tunnel Cloudflare.
+  allowedDevOrigins: ["*.trycloudflare.com"],
 };
 
 export default nextConfig;
