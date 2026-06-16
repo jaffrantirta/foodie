@@ -63,7 +63,7 @@ export default function GoalsPage() {
         method: "POST",
         body: JSON.stringify({ goalType, gender, weightKg, heightCm, age, activityLevel }),
       });
-      router.push("/");
+      router.push("/home");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Gagal menyimpan target.");
       setSaving(false);

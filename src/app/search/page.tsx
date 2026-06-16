@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CalendarDays } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { api } from "@/lib/clientApi";
@@ -14,6 +15,9 @@ export default function SearchPage() {
   const [portion, setPortion] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [logDate, setLogDate] = useState(
+    () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(new Date())
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,9 +56,10 @@ export default function SearchPage() {
           ...scaled,
           sourceType: "search",
           foodId: selected.id,
+          consumedAt: logDate,
         }),
       });
-      router.push("/");
+      router.push("/home");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Gagal menyimpan catatan.");
       setSaving(false);
@@ -111,6 +116,20 @@ export default function SearchPage() {
                 <p className="text-[10px] text-muted">karbo</p>
               </div>
             </div>
+            <label className="flex items-center justify-between gap-3 text-sm">
+              <span className="flex items-center gap-1.5 text-muted">
+                <CalendarDays size={15} />
+                Tanggal
+              </span>
+              <input
+                type="date"
+                value={logDate}
+                max={new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(new Date())}
+                onChange={(e) => setLogDate(e.target.value)}
+                className="rounded-xl border border-white/10 bg-surface px-3 py-2 text-right font-bold focus:border-accent focus:outline-none"
+              />
+            </label>
+
             {error && <p className="text-sm text-red">{error}</p>}
             <div className="flex gap-2">
               <button

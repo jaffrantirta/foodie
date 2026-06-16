@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Camera, Check, Sparkles } from "lucide-react";
+import { CalendarDays, Camera, Check, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ScanPicker } from "@/components/ScanPicker";
 import { api, PENDING_SCAN_KEY } from "@/lib/clientApi";
@@ -17,6 +17,9 @@ export default function ScanPage() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [logDate, setLogDate] = useState(
+    () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(new Date())
+  );
 
   const analyze = useCallback(async (dataUrl: string) => {
     setLoading(true);
@@ -75,9 +78,10 @@ export default function ScanPage() {
           ...scaled,
           sourceType: "scan",
           scanId: scan.id,
+          consumedAt: logDate,
         }),
       });
-      router.push("/");
+      router.push("/home");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Gagal menyimpan catatan.");
       setSaving(false);
@@ -185,6 +189,20 @@ export default function ScanPage() {
               </div>
             </div>
 
+            <label className="flex items-center justify-between gap-3 text-sm">
+              <span className="flex items-center gap-1.5 text-muted">
+                <CalendarDays size={15} />
+                Tanggal
+              </span>
+              <input
+                type="date"
+                value={logDate}
+                max={new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(new Date())}
+                onChange={(e) => setLogDate(e.target.value)}
+                className="rounded-xl border border-white/10 bg-surface px-3 py-2 text-right font-bold focus:border-accent focus:outline-none"
+              />
+            </label>
+
             <button
               type="button"
               onClick={saveLog}
@@ -192,7 +210,7 @@ export default function ScanPage() {
               className="flex items-center justify-center gap-2 rounded-xl bg-green py-3 font-bold text-background disabled:opacity-50"
             >
               <Check size={18} />
-              {saving ? "Menyimpan…" : "Catat ke Hari Ini"}
+              {saving ? "Menyimpan…" : "Catat"}
             </button>
           </div>
         )}

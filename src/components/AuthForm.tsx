@@ -27,7 +27,7 @@ export function AuthForm({ mode }: { mode: "login" | "register" }) {
           isRegister ? { username, password, fullName } : { username, password }
         ),
       });
-      router.replace("/");
+      router.replace("/home");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal. Coba lagi.");
     } finally {

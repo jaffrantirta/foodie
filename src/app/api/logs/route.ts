@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     sourceType?: "search" | "scan" | "manual";
     foodId?: string;
     scanId?: string;
+    consumedAt?: string; // YYYY-MM-DD in WIB
   };
   try {
     body = await request.json();
@@ -54,6 +55,10 @@ export async function POST(request: Request) {
     );
   }
 
+  const consumedAt = body.consumedAt
+    ? new Date(`${body.consumedAt}T12:00:00+07:00`)
+    : new Date();
+
   const [log] = await db
     .insert(foodLogs)
     .values({
@@ -67,6 +72,7 @@ export async function POST(request: Request) {
       proteinG: String(Math.max(0, body.proteinG ?? 0)),
       fatG: String(Math.max(0, body.fatG ?? 0)),
       carbsG: String(Math.max(0, body.carbsG ?? 0)),
+      consumedAt,
     })
     .returning();
 

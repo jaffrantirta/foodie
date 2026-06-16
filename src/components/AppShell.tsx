@@ -7,7 +7,7 @@ import { Camera, Home, Search, Target } from "lucide-react";
 import { api, ApiError } from "@/lib/clientApi";
 
 const NAV = [
-  { href: "/", label: "Home", Icon: Home },
+  { href: "/home", label: "Home", Icon: Home },
   { href: "/scan", label: "Scan", Icon: Camera },
   { href: "/search", label: "Cari", Icon: Search },
   { href: "/goals", label: "Target", Icon: Target },
